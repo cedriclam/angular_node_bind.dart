@@ -61,15 +61,13 @@ class NodeBindDirective {
         if (expression.isAssignable) {
           box.changes.listen((_) => expression.assign(scope, box.value));
         }
-        scope.$watch(expression.eval, (value, _) => box.value = value,
-            '$attr=$value');
+        scope.watch(expression.eval, (value, _) => box.value = value);
       } else {
         var curlies = value.splitMapJoin(_INTERPOLATE_REGEXP,
             onMatch: (m) => '{{${m[1]}}}');
         var interpolation = interpolate(curlies);
         interpolation.setter = (text) => box.value = text;
-        scope.$watchSet(interpolation.watchExpressions, interpolation.call,
-            '$attr=$value');
+        scope.watch(interpolation.watchExpressions, interpolation.call);
       }
     }
   }
